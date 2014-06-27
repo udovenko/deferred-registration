@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(-1);
+ini_set('display_errors', 1);
+
 // Website document root:
 define('DOCROOT', __DIR__ . DIRECTORY_SEPARATOR);
 
@@ -11,10 +14,11 @@ define('APPPATH', realpath(__DIR__ . '/../app') . DIRECTORY_SEPARATOR);
 
 try 
 {
-    echo "Loading router and executing current route<br/>";
+    // Loading application classes:
     require_once APPPATH . 'core/boot.class.php';
     spl_autoload_register('\core\Boot::Autoload');
-    //echo "loded register</br>";
+    
+    // Executing router:
     \core\Router::execute();
 } catch (Exception $exception) {
     

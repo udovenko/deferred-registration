@@ -34,7 +34,6 @@ class Url
     {
         if (isset($_GET['router'])) 
         {
-            echo"url";
             self::$_url = array_filter(explode('/', $_GET['router']));
             unset($_GET['router'], $_REQUEST['router']);
             

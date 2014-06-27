@@ -1,110 +1,122 @@
 <?php
+
 namespace core;
 
 
+/**
+ * Implements basic routing with URL params. Acts as Front controller for 
+ * application.
+ *  
+ * @author Denis Udovenko
+ * @version 1.0.3
+ */
 class Router 
 {
+    
     private static $_class = null;
     
     
     /**
-     * перенаправление на контроллер 
+     * Redirects URL string to controllers actions and handles results.
      */
-    public static function execute() 
+    public static function execute()
     {
-        
         $url = Url::getUrl();
-               
+            
+        // If URL contains controller name:
         if (isset($url[0]))
         {
             $className = "\controllers\\" . ucfirst($url[0]);
             $class = new $className();
             
-        } else {
-    
+        } else { // If URL is root:
+             
+            $className = "\controllers\\Index";
+            $class = new $className();
+        }// else   
+        
+        // Checking that created controller instance is valid:
+        if (!is_object($class) || !$class instanceof $className) 
+                throw new \Exception("Class $className not found");
+        
             
-            $class = new \controllers\Index();
-            echo "zzzz";
-            
-        }    
-            
-            if (!is_object($class) || !$class instanceof $className) throw new Exception("Class $className not found");
-           
-                
-            $methodName = $this->_getClassMethod($url);
-            
-            if (method_exists($class, $methodName))  throw new Exception("Method $methodName not found for class $className not found");
-                
-                $this->_checkAuth($class, $methodName);
-                $data = $this->_getRequestData($url);
-                echo $this->_setResult(call_user_func_array(array($class, $methodName), $data));
-                
-                
-                
-            
-       
-        $this->_class->performAction();
-    }
+        $methodName = self::_getClassMethod($url);
+
+        // Checking that controller has recevid method:
+        if (!method_exists($class, $methodName)) 
+            throw new \Exception("Method $methodName not found for class $className not found");
+        
+        //$this->_checkAuth($class, $methodName);
+        //$data = $this->_getRequestData($url);
+        $data = array();
+        echo call_user_func_array(array($class, $methodName), $data);
+    }// execute
     
     
     /**
-     * получение текущего контроллера
-     * @return object | null
+     * Returns current controller.
+     * 
+     * @return {Object | null} Current controller
      */
     public static function getController() 
     {
         return $this->_class;
-    }
+    }// getController
     
     
     /**
+     * Determines controller method name from given URL.
      * 
-     * 
-     * 
-     * 
+     * @param {Array} $url URL segments array 
+     * @return {String} Method name
      */
-    private function _getClassMethod($url) 
+    private static function _getClassMethod($url) 
     {
-        $request = new app\Request();
+        $request = new \core\Request();
         $request_method = $request->getRequestMethod();
 
-        switch ($request_method) {
+        switch ($request_method) 
+        {
             case 'GET':
-                if (!empty($url[2]) && !is_numeric($url[2])) {                    // если передано имя метода
-                    $methodName = $url[2];
-                } else {
-                    $methodName = 'get';//совпадает с именем метода в запросе
-                }
+                
+                if (!empty($url[1]) && !is_numeric($url[1])) $methodName = $url[1];
+                else $methodName = 'get';
+                
                 break;
+                
             case 'POST':
-                if (!empty($url[2])) {
-                    if (is_numeric($url[2])) {
-                        $methodName = 'update';
-                    } else {
-                        $methodName = $url[2];
-                    }
+                
+                if (!empty($url[2])) 
+                {
+                    if (is_numeric($url[2])) $methodName = 'update';
+                    else $methodName = $url[2];
+                    
                 } else {
                     $methodName = 'create';
-                }
+                }// elses
+                
                 break;
+                
             case 'PUT':
-                if (!empty($url[2]) && is_numeric($url[2])) {
-                    $methodName = 'update';//тут бы по-хорошему добавлять либо обновлять
-                } else {
-                    throw new \app\Error(404);
-                }                
+                
+                if (!empty($url[2]) && is_numeric($url[2])) $methodName = 'update';
+                else throw new \Exception("Can't determine method name for PUT request");
+                                        
                 break;
+                
             case 'DELETE':
-                if (!empty($url[2]) && is_numeric($url[2])) {
-                    $methodName = 'delete';
-                } else {
-                    throw new \app\Error(404);
-                }
+                
+                if (!empty($url[2]) && is_numeric($url[2])) $methodName = 'delete';
+                else throw new \Exception("Can't determine method name for DELETE request");
+                
                 break;
+                
             default:
-                throw new \app\Error(405); //Method Not Allowed
+                
+                throw new \Exception("Method detection error");
                 break;
-        }
+        }// switch
+        
         return $methodName;
-    }
-}
+    }// _getClassMethod
+}// Router

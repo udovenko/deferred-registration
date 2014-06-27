@@ -2,19 +2,22 @@
 
 namespace controllers;
 
+
 /** 
+ * Index page controller.
  * 
+ * @author denis Udovenko
+ * @version 1.0.1
  */
 class Index
 {
     
-    public function __construct() {
-        echo "construct";
-        //Reg::Get('\app\Response')->setHeader('Content-Type:application/json; charset=utf-8');
-    }
-    
+  
+    /**
+     * Renders index page.
+     */
     public function get()
     {
-        echo "index page!!!";
-    }
-}
+        echo \core\View::forge("index")->setData(array("data" => "zyyyy"))->render();
+    }// get
+}// Index
