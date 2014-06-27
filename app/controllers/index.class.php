@@ -18,6 +18,7 @@ class Index
      */
     public function get()
     {
-        echo \core\View::forge("index")->setData(array("data" => "zyyyy"))->render();
+        $content = \core\View::forge("index")->setData(array("data" => "zyyyy"))->render();
+        return \core\View::forge("layout")->setData(array("content" => $content))->render();
     }// get
 }// Index

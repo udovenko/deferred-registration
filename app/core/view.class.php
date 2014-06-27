@@ -11,6 +11,7 @@ namespace core;
  */
 class View
 {
+    
     private $_fileName;
     private $_data = array();
     
@@ -44,7 +45,7 @@ class View
      */
     public function setData($data)
     {
-        $this->data = $data;
+        $this->_data = $data;
         return $this;
     }// setData
     
@@ -58,7 +59,7 @@ class View
         $clean_room = function($__file_name, array $__data)
         {
             extract($__data, EXTR_REFS);
-
+            
             // Capture the view output
             ob_start();
 

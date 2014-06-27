@@ -37,19 +37,17 @@ class Router
         
         // Checking that created controller instance is valid:
         if (!is_object($class) || !$class instanceof $className) 
-                throw new \Exception("Class $className not found");
+            throw new \Exception("Class $className not found");
         
-            
         $methodName = self::_getClassMethod($url);
 
         // Checking that controller has recevid method:
         if (!method_exists($class, $methodName)) 
             throw new \Exception("Method $methodName not found for class $className not found");
-        
+                
         //$this->_checkAuth($class, $methodName);
-        //$data = $this->_getRequestData($url);
-        $data = array();
-        echo call_user_func_array(array($class, $methodName), $data);
+        $responceBody = call_user_func(array($class, $methodName));
+        \core\Response::forge($responceBody)->send();
     }// execute
     
     
@@ -86,10 +84,10 @@ class Router
                 
             case 'POST':
                 
-                if (!empty($url[2])) 
+                if (!empty($url[1])) 
                 {
-                    if (is_numeric($url[2])) $methodName = 'update';
-                    else $methodName = $url[2];
+                    if (is_numeric($url[1])) $methodName = 'update';
+                    else $methodName = $url[1];
                     
                 } else {
                     $methodName = 'create';

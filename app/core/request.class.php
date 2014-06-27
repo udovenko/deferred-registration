@@ -22,6 +22,16 @@ class Request
    
     
     /**
+     * 
+     */
+    public static function forge()
+    {
+        $request = new static();
+        return $request;
+    }// forge         
+        
+    
+    /**
      * Returns HTTP request method name.
      * 
      * @return {String} HTTP request method name

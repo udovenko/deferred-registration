@@ -12,13 +12,22 @@ namespace controllers;
 class Users
 {
     
-    
     /**
      * Renders registration form.
      */
     public function add()
     {
-        
-        echo "registration form";
+        $content = \core\View::forge("registration")->render();
+        return \core\View::forge("layout")->setData(array("content" => $content))->render();
     }// add
+    
+    
+    /**
+     *
+     */
+    public function confirm()
+    {
+        $data = \core\Request::forge()->getData();
+        echo $data["email"];
+    }// confirm
 }// Users
