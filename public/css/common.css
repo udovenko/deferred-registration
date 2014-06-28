@@ -72,3 +72,14 @@ p {
     color: #fff;
     text-decoration: none;
 }
+
+/* alerts and errors*/
+
+#error_explanation {
+    color: #f00;
+}
+
+#error_explanation ul {
+    list-style: none;
+    margin: 0 0 20px 0;
+}

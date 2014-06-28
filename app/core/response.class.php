@@ -134,10 +134,10 @@ class Response
     public static function redirect($url = '', $method = 'location', $code = 302)
     {
         $response = new static;
-        $response->set_status($code);
+        $response->setStatus($code);
 
-        if ($method == 'location') $response->set_header('Location', $url);
-        elseif ($method == 'refresh') $response->set_header('Refresh', '0;url='.$url);
+        if ($method == 'location') $response->setHeader('Location', $url);
+        elseif ($method == 'refresh') $response->setHeader('Refresh', '0;url='.$url);
         else return;
         
         $response->send(true);
