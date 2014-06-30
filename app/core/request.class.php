@@ -14,26 +14,30 @@ class Request
     
     const POST = 'post';
     const GET = 'get';
-    const PUT = 'put';
-    const DELETE = 'delete';
+    //const PUT = 'put';
+    //const DELETE = 'delete';
     
     private $_data = array();
-    private $_headers = null;
+    //private $_headers = null;
    
     
     /**
+     * Returns new Request instance.
      * 
+     * @static
+     * @access public
+     * @return {Request} Request instance
      */
     public static function forge()
     {
-        $request = new static();
-        return $request;
+        return new static();
     }// forge         
         
     
     /**
      * Returns HTTP request method name.
      * 
+     * @access public
      * @return {String} HTTP request method name
      */
     public function getRequestMethod() 
@@ -48,7 +52,7 @@ class Request
      * @param string $key
      * @return array
      */
-    public function getApacheLikeHeaders($key = null) {
+    /*public function getApacheLikeHeaders($key = null) {
         if (is_null($this->_headers)) {
             if (function_exists('apache_request_headers')) { // apache
                 $this->_headers = apache_request_headers();
@@ -67,7 +71,7 @@ class Request
         } else {
             return isset($this->_headers[$key]) ? $this->_headers[$key] : null;
         }
-    }
+    }*/
     
     /**
      * Receives request parameters depending on request type.
@@ -82,9 +86,9 @@ class Request
        
         switch ($request) 
         {
-            case self::PUT:
+            //case self::PUT:
                 
-                if (isset($this->_data[$request])) 
+                /*if (isset($this->_data[$request])) 
                 {
                     return $this->_data[$request];
                 } else {
@@ -99,9 +103,9 @@ class Request
                     return $this->_data[$request];
                 }// else
                 
-                break;
+                break;*/
                 
-            case self::GET: case self::DELETE:
+            case self::GET: //case self::DELETE:
                 
                 if (isset($this->_data[$request])) 
                 {

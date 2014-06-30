@@ -4,7 +4,10 @@ namespace core;
 
 
 /** 
- *
+ * Simple PDO wrapper class.
+ * 
+ * @author Denis Udovenko
+ * @version 1.0.1
  */
 class Db
 {
@@ -15,8 +18,10 @@ class Db
     
     
     /**
-     *
+     * Crates a PDO instance with current settings.
      * 
+     * @access public
+     * @return {PDO} PDO instance
      */
     public static function forge()
     {        
@@ -27,6 +32,6 @@ class Db
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
             \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-        ));
+        ));// new
     }// forge
 }// Db

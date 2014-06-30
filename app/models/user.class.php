@@ -57,6 +57,9 @@ class User
     
     /**
      * Validates current current instance fields. 
+     * 
+     * @access public
+     * @retrun {Boolean} Is model valid
      */
     public function validate()
     {
@@ -79,8 +82,7 @@ class User
             $this->_errors[] = "name is empty";
 
         if (strlen($this->_name) > 20) $this->_errors[] = "name is too long (only 20 characters is allowed)";
-        
-        
+                
         return empty($this->_errors); 
     }// validate
     
@@ -114,22 +116,13 @@ class User
             // Update attributes
         }// else
     }// save
-       
+  
     
     /**
-     *
+     * Determines if models is new by its identifier.
      * 
-     */
-    public function logIn()
-    {
-        
-    }// logIn
-        
-    
-    /**
-     *
-     * 
-     * 
+     * @access public
+     * @return {Boolean} Is model new
      */
     public function isNew()
     {
@@ -138,8 +131,10 @@ class User
     
     
     /**
-     *
+     * Returns current model identifier.
      * 
+     * @access public
+     * @return {Integer} Current model identifier
      */
     public function getId()
     {
@@ -208,7 +203,12 @@ class User
     
     
     /**
-     *
+     * Finds model in database by given attributes.
+     * 
+     * @static
+     * @access public
+     * @param {Array} $conditions Search conditions (field => value)
+     * @return {Array} Array of found instances
      */    
     public static function findBy($conditions)
     {

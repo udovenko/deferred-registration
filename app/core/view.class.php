@@ -19,6 +19,8 @@ class View
     /**
      * Returns a new View instance.
      * 
+     * @static
+     * @access public
      * @param {String} $fileName View file name (relative to "views" dirrectory)
      * @return {View} New view instance for chaining calls
      */
@@ -31,6 +33,7 @@ class View
     /**
      * Public constructor.
      * 
+     * @access public
      * @param {String} $fileName View file name (relative to "views" dirrectory)
      */
     public function __construct($fileName) 
@@ -40,8 +43,11 @@ class View
     
         
     /**
-     *
+     * Sets up view data which will be transformed into view variables.
      * 
+     * @access public
+     * @param {Array} $data View values hash
+     * @return {View} Current view instance
      */
     public function setData($data)
     {
@@ -51,36 +57,33 @@ class View
     
     
     /**
-     *
+     * Render view from template and passes data.
      * 
+     * @access public
+     * @return {String} Rendered view
      */
     public function render()
     {
-        $clean_room = function($__file_name, array $__data)
+        extract($this->_data, EXTR_REFS);
+
+        // Capture the view output
+        ob_start();
+
+        try
         {
-            extract($__data, EXTR_REFS);
-            
-            // Capture the view output
-            ob_start();
+            // Load the view within the current scope:
+            include $this->_fileName;
+        }
+        catch (\Exception $e)
+        {
+            // Delete the output buffer:
+            ob_end_clean();
 
-            try
-            {
-                    // Load the view within the current scope
-                    include $__file_name;
-            }
-            catch (\Exception $e)
-            {
-                    // Delete the output buffer
-                    ob_end_clean();
+            // Re-throw the exception:
+            throw $e;
+        }
 
-                    // Re-throw the exception
-                    throw $e;
-            }
-
-            // Get the captured output and close the buffer
-            return ob_get_clean();
-        };
-        
-        return $clean_room($this->_fileName, $this->_data);
+        // Get the captured output and close the buffer
+        return ob_get_clean();
     }// render
 }// View

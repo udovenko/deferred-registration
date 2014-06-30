@@ -4,14 +4,16 @@ namespace core;
 
 
 /**
- *
+ * Class implements server responce methods.
  * 
+ * @author Denis Udovenko
+ * @version 1.0.5
  */
 class Response
 {
 
     /**
-     * @var {Array} An array of status codes and messages
+     * @var {Array} An array of status codes and messages (From FuelPHP framework).
      */
     public static $statuses = array(
         100 => 'Continue',
@@ -76,17 +78,17 @@ class Response
     );// statuses
     
     /**
-     * @var {Integer} The HTTP status code
+     * @var {Integer} The HTTP status code.
      */
     public $status = 200;
 
     /**
-     * @var {Array} An array of HTTP headers
+     * @var {Array} An array of HTTP headers.
      */
     public $headers = array();
 
     /**
-     * @var {String} The content of the response
+     * @var {String} The content of the response.
      */
     public $body = null;
 
@@ -94,10 +96,11 @@ class Response
     /**
      * Creates an instance of the Response class.
      *
+     * @access public
      * @param string $body The response body
      * @param int $status The HTTP response status for this response
      * @param array $headers Array of HTTP headers for this reponse
-     * @return  Response
+     * @return {Response} New response inctance
      */
     public static function forge($body = null, $status = 200, array $headers = array())
     {
@@ -109,24 +112,25 @@ class Response
     /**
      * Sets up the response with a body and a status code.
      *
-     * @param  string  $body    The response body
-     * @param  string  $status  The response status
+     * @access public
+     * @param {String} $body Response body
+     * @param {String} $status Response status
      */
     public function __construct($body = null, $status = 200, array $headers = array())
     {
-        foreach ($headers as $k => $v)
-        {
-                $this->set_header($k, $v);
-        }
+        foreach ($headers as $name => $name) $this->setHeader($name, $name);
+        
         $this->body = $body;
         $this->status = $status;
     }// __construct 
 
     
     /**
-     * Redirects to another url.  Sets the redirect header, sends the headers 
+     * Redirects to another url. Sets the redirect header, sends the headers 
      * and exits. Can redirect via a Location header or using a refresh header.
      *
+     * @static
+     * @access public
      * @param string $url URL user will be redirected to 
      * @param string $method Method will be used to redirect
      * @param int $code The redirect status code
@@ -148,6 +152,7 @@ class Response
     /**
      * Sets the response status code.
      *
+     * @access public
      * @param {String} $status The status code
      * @return {Response} Current responce instance
      */
@@ -161,6 +166,7 @@ class Response
     /**
      * Adds a header to the queue or replaces existing one.
      *
+     * @access public
      * @param string Header name
      * @param string Header value
      * @param string Whether to replace existing value for the header, will never overwrite/be overwritten when false
@@ -178,6 +184,7 @@ class Response
     /**
      * Gets header information from the queue.
      *
+     * @access public
      * @param {String} Header name, or null to get all headers
      * @return {String | Array | null} Header or array of headers
      */
@@ -192,8 +199,9 @@ class Response
     /**
      * Sets (or returns) the body for the response.
      *
-     * @param   string  The response content
-     * @return  Response|string
+     * @access public
+     * @param {String} The response content
+     * @return {Response | String} Current response instance or response body
      */
     public function body($value = false)
     {
@@ -208,12 +216,13 @@ class Response
     
 
     /**
-     * Sends the headers if they haven't already been sent.  Returns whether
+     * Sends the headers if they haven't already been sent. Returns whether
      * they were sent or not.
      *
-     * @return  bool
+     * @access public
+     * @return {Boolean} Headers were sent or not
      */
-    public function send_headers()
+    public function sendHeaders()
     {
         if ( ! headers_sent())
         {
@@ -248,47 +257,19 @@ class Response
         }// if
         
         return false;
-    }
+    }// sendHeaders
+    
 
     /**
-     * Sends the response to the output buffer.  Optionally will send the
+     * Sends the response to the output buffer. Optionally will send the
      * headers.
      *
-     * @param   bool  $send_headers  Whether or not to send the defined HTTP headers
-     *
-     * @return  void
+     * @access public
+     * @param {Boolean} $send_headers Whether or not to send the defined HTTP headers
      */
     public function send($send_headers = false)
     {
-            $body = $this->__toString();
-
-            if ($send_headers)
-            {
-                    $this->send_headers();
-            }
-
-            if ($this->body != null)
-            {
-                    echo $body;
-            }
-    }
-
-    /**
-     * Returns the body as a string.
-     *
-     * @return  string
-     */
-    public function __toString()
-    {
-            // special treatment for array's
-            if (is_array($this->body))
-            {
-                    // this var_dump() is here intentionally !
-                    ob_start();
-                    var_dump($this->body);
-                    $this->body = html_entity_decode(ob_get_clean());
-            }
-
-            return (string) $this->body;
-    }
-}
+        if ($send_headers) $this->sendHeaders();
+        if ($this->body !== null) echo $this->body;
+    }// send
+}// Response

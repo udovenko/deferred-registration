@@ -19,7 +19,7 @@ class Users extends Common
      * Renders registration form.
      * 
      * @access public
-     * @return {String} Rendered layout with registration form
+     * @return {String | Response} Rendered layout with registration form or response with redirect
      */
     public function create()
     {
@@ -60,8 +60,11 @@ class Users extends Common
     
     
     /**
-     *
+     * If current user is logged in, renders user profile. Else redirect to 
+     * index page. 
      * 
+     * @access public
+     * @return {String | Response} Rendered profile page or redirect response
      */
     public function show()
     {
@@ -76,10 +79,11 @@ class Users extends Common
     
       
     /**
-     * Renders information message about registration e-main.
+     * Renders information message about registration e-main, if there is no 
+     * current user session. Else redirects to index page.
      * 
      * @access public
-     * @return {String} Rendered layout with information message
+     * @return {String | Response} Rendered layout with information message or redirect response
      */
     public function reginfo()
     {
@@ -94,8 +98,12 @@ class Users extends Common
     
     
     /**
-     *
+     * Accepts registration confirmation request by registration token and 
+     * creates user. If token or any other uses info is invalid, renders error
+     * page.
      * 
+     * @access public
+     * @return {Response | String} Responce with redirect or rendered error page
      */
     public function confirm()
     {

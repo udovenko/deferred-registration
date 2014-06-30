@@ -5,18 +5,24 @@ namespace core;
 /**
  * Class for URL parsing.
  * 
- * @author denis Udovenko
+ * @author Denis Udovenko
  * @version 1.0.1
  */
 class Url 
 {
+    
+    /**
+     * @var {Array} An array of URL segments 
+     */
     private static $_url = null;
     
     
     /**
-     *
+     * Returns site base URL.
      * 
-     * @return {String}
+     * @static
+     * @access public
+     * @return {String} Site base URL
      */
     public static function getBase()
     {
@@ -33,8 +39,10 @@ class Url
     
     
     /**
-     * Splits URL into segments and return them in array.
+     * Splits URL into segments and return them as an array.
      * 
+     * @static
+     * @access public
      * @return {Array} Array of URL segments
      */
     public static function getUrl() 
@@ -47,7 +55,8 @@ class Url
     /**
      * Parces current URL and puts resut into private field.
      *    
-     * @access private 
+     * @static
+     * @access private
      */
     private static function _parseUrl() 
     {

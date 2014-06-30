@@ -13,16 +13,22 @@ namespace core;
 class Router 
 {
     
-    private static $_class = null;
+    /**
+     * @var {String} Class name for current request.
+     */
+    //private static $_class = null;
     
     
     /**
      * Redirects URL string to controllers actions and handles results.
+     * 
+     * @static
+     * @access public
      */
     public static function execute()
     {
         $url = Url::getUrl();
-            
+        
         // If URL contains controller name:
         if (isset($url[0]))
         {
@@ -45,7 +51,6 @@ class Router
         if (!method_exists($class, $methodName)) 
             throw new \Exception("Method $methodName not found for class $className not found");
                 
-        //$this->_checkAuth($class, $methodName);
         $responceBody = call_user_func(array($class, $methodName));
         
         \core\Response::forge($responceBody)
@@ -59,15 +64,17 @@ class Router
      * 
      * @return {Object | null} Current controller
      */
-    public static function getController() 
+    /*public static function getController() 
     {
         return $this->_class;
-    }// getController
+    }// getController*/
     
     
     /**
      * Determines controller method name from given URL.
      * 
+     * @static
+     * @access public
      * @param {Array} $url URL segments array 
      * @return {String} Method name
      */
@@ -98,7 +105,7 @@ class Router
                 
                 break;
                 
-            case 'PUT':
+            /*case 'PUT':
                 
                 if (!empty($url[2]) && is_numeric($url[2])) $methodName = 'update';
                 else throw new \Exception("Can't determine method name for PUT request");
@@ -110,7 +117,7 @@ class Router
                 if (!empty($url[2]) && is_numeric($url[2])) $methodName = 'delete';
                 else throw new \Exception("Can't determine method name for DELETE request");
                 
-                break;
+                break;*/
                 
             default:
                 
