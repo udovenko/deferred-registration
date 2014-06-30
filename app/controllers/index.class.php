@@ -9,18 +9,18 @@ namespace controllers;
  * @author denis Udovenko
  * @version 1.0.1
  */
-class Index
+class Index extends Common
 {
     
-  
+    const SESSION_USER_ID_KEY = "user_id";
+    
+    
     /**
      * Renders index page.
      */
     public function get()
     {
-        
-        echo \core\Session::forge()->get("registration_token");
-        $content = \core\View::forge("index")->setData(array("data" => "zyyyy"))->render();
-        return \core\View::forge("layout")->setData(array("content" => $content))->render();
+        $content = \core\View::forge("index")->render();
+        return $this->_renderLayout($content);
     }// get
 }// Index

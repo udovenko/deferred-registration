@@ -38,7 +38,12 @@ class Session
      */
     public function start()
     {
-        session_start();
+        if(session_id() == '') 
+        {
+            session_set_cookie_params(60 * 60 * 12 * 365);
+            session_start();
+        }// if
+        
         isset($_SESSION[$this->meta]) || $this->init();
     }// _start
     
@@ -46,21 +51,21 @@ class Session
     /**
      * write session data to store and close the session.
      */
-    public function commit()
+    /*public function commit()
     {
         session_commit();
-    }
+    }*/
 
     
     public function destroy()
     {
         $_SESSION = array();
         
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
 
         session_destroy();
     }
@@ -83,6 +88,12 @@ class Session
         $_SESSION[$name] = $value;
         return $this;
     }// set
+    
+    
+    public function remove($name)
+    {
+        unset($_SESSION[$name]);
+    }
     
     
     /**

@@ -15,11 +15,12 @@ class User
     const REGISTRATION_TOKEN_LENGTH = 18;
     const PASSWORD_MIN_LENGTH       = 6;
     const PASSWORD_MAX_LENGTH       = 10;
-    const PASSWORD_SALT             = "N31b!pR4";
+    const PASSWORD_SALT             = "$2a$10$1qAz2wSx3eDc4rFv5tGb5t";
     
+    private $_id;
     private $_email;
     private $_name;
-    private $_password;
+    private $_encryptedPassword;
     private $_token;
     private $_errors; 
     
@@ -35,7 +36,7 @@ class User
      */
     public static function forge($email = null, $name = null)
     {
-        return new static($email, $name);
+        return new static($email, $name, null);
     }// forge
     
     
@@ -46,12 +47,11 @@ class User
      * @param {String} $email Users e-mail
      * @param {String} $name User name
      */
-    public function __construct($email = null, $name = null)
+    public function __construct($email = null, $name = null, $id = null)
     {
         $this->_email = $email;
         $this->_name = $name;
-        $this->_generatePassword();
-        $this->_generateRegistrationToken();
+        $this->_id = $id;
     }// __construct
     
     
@@ -71,6 +71,8 @@ class User
         if (!preg_match("/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i", $this->_email)) 
             $this->_errors[] = "email has invalid format";
         
+        $users = static::findBy(array("email" => $this->_email));
+        if (!empty($users)) $this->_errors[] = "email is already taken";
         
         // Validation rules for name:
         if (!isset($this->_name) || empty(trim($this->_name)))
@@ -81,6 +83,68 @@ class User
         
         return empty($this->_errors); 
     }// validate
+    
+    
+    /**
+     * Saves user. If user has id - updates his attributes, if hasn't - inserts
+     * new one into database.
+     * 
+     * @access public
+     */
+    public function save()
+    {
+        $database = \core\Db::forge();
+        
+        if (!isset($this->_id))
+        {
+            $insertUserQueryText = "INSERT INTO `users` (`email`,`name`, `password`) VALUES (?, ?, ?)";
+
+            $insertUserQuery = $database->prepare($insertUserQueryText);
+
+            $insertUserQuery->bindParam(1, $this->_email);
+            $insertUserQuery->bindParam(2, $this->_name);
+            $insertUserQuery->bindParam(3, $this->_encryptedPassword);
+
+            $insertUserQuery->execute();
+
+            $this->_id = $database->lastInsertId();
+            
+        } else {
+            
+            // Update attributes
+        }// else
+    }// save
+       
+    
+    /**
+     *
+     * 
+     */
+    public function logIn()
+    {
+        
+    }// logIn
+        
+    
+    /**
+     *
+     * 
+     * 
+     */
+    public function isNew()
+    {
+        return $this->_id === null;
+    }// isNew
+    
+    
+    /**
+     *
+     * 
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }// getId
     
     
     /**
@@ -108,8 +172,10 @@ class User
     
     
     /**
-     *
+     * Returns registration token.
      * 
+     * @access public
+     * @return {String} Current user name
      */
     public function getRegistrationToken()
     {
@@ -121,11 +187,10 @@ class User
      * Returns generated password.
      * 
      * @access public
-     * @return {String} Current user name
      */
-    public function getPassword()
+    public function encryptAndSetPassword($password)
     {
-        return $this->_password;
+        $this->_encryptedPassword = static::encryptPassword($password);
     }// _getPassword
     
     
@@ -140,30 +205,74 @@ class User
     {
         return $this->_errors;
     }// getErrors
+    
+    
+    /**
+     *
+     */    
+    public static function findBy($conditions)
+    {
+        $database = \core\Db::forge();
         
+        $usersQueryText = "SELECT * FROM `users` WHERE ";
+        $conditionsCount = 0;
+        foreach ($conditions as $field => $value)
+        {
+            if ($conditionsCount) $usersQueryText .= " AND "; 
+            $usersQueryText .= "`" . filter_var($field, FILTER_SANITIZE_STRING) . "` = :$field";
+            $conditionsCount++;
+        }// foreach
+
+        $usersQuery = $database->prepare($usersQueryText);
+        foreach ($conditions as $field => $value) $usersQuery->bindValue(":$field", $value, \PDO::PARAM_STR);
+
+        $usersQuery->execute();
+     
+        $result = array();
+        while ($user = $usersQuery->fetch())
+        {
+            $result[] = new static($user->email, $user->name, $user->id);
+        }//while
+        
+        return $result;
+    }// findBy
+    
     
     /**
      * Generates registration token.
      * 
+     * @static
      * @access private
      */
-    public function _generateRegistrationToken()
+    public static function generateRegistrationToken()
     {        
-        $this->_token = static::_randomString(static::REGISTRATION_TOKEN_LENGTH);
+        return static::_randomString(static::REGISTRATION_TOKEN_LENGTH);
     }// _generateRegistrationToken
     
     
     /**
      * Generates user password.
      * 
+     * @static
      * @access private
      */
-    private function _generatePassword()
+    public static function generatePassword()
     {
         // Initialize a random desired length:
         $length = rand(static::PASSWORD_MIN_LENGTH, static::PASSWORD_MAX_LENGTH);
-        $this->_password = static::_randomString($length);
+        return static::_randomString($length);
     }// sendRegistrationMail
+    
+    
+    /**
+     * Encrypts current password with "bcrypt" algorythm.
+     * 
+     * @return {String} Encrypted password
+     */
+    public static function encryptPassword($password)
+    {
+        return substr(crypt($password,  static::PASSWORD_SALT), 28);
+    }// _encryptPassword
     
     
     /**

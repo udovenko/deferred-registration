@@ -9,7 +9,7 @@
       Thank you for registreng on our service.<br/><br/> 
       For further authentication please use</br>
       E-mail: <?php echo $user->getEmail(); ?></br>
-      password: <?php echo $user->getPassword(); ?>
+      password: <?php echo $password; ?>
     </p>
     <p>
        To complete registration, please <a href="<?php echo $link; ?>">folow the link</a>.<br/>

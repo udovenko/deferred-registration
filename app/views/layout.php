@@ -14,6 +14,14 @@
                 <nav>
                 <ul class="nav navbar-nav pull-right">
                   <li><a href="/">Home</a></li>
+                  
+                  <?php if (isset($user) && !$user->isNew()) { ?>
+                    <li><a href="/users/show">Profile</a></li>
+                    <li><a href="/session/destroy">Logout</a></li>
+                  <?php } else { ?>
+                    
+                    <li><a href="/session/create">Login</a></li>
+                  <?php } ?>
                 </ul>
               </nav>
             </div>
