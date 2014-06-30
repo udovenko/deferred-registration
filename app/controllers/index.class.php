@@ -18,6 +18,8 @@ class Index
      */
     public function get()
     {
+        
+        echo \core\Session::forge()->get("registration_token");
         $content = \core\View::forge("index")->setData(array("data" => "zyyyy"))->render();
         return \core\View::forge("layout")->setData(array("content" => $content))->render();
     }// get

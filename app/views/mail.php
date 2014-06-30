@@ -8,9 +8,11 @@
     <p>
       Thank you for registreng on our service.<br/><br/> 
       For further authentication please use</br>
+      E-mail: <?php echo $user->getEmail(); ?></br>
+      password: <?php echo $user->getPassword(); ?>
     </p>
     <p>
-       To complete registration, please folow the link.<br/>
+       To complete registration, please <a href="<?php echo $link; ?>">folow the link</a>.<br/>
        Please note that you should use same browser, as you used to begin registration. 
     </p>
     <p>Thanks for using our service!</p>

@@ -47,7 +47,10 @@ class Router
                 
         //$this->_checkAuth($class, $methodName);
         $responceBody = call_user_func(array($class, $methodName));
-        \core\Response::forge($responceBody)->send();
+        
+        \core\Response::forge($responceBody)
+            ->setHeader("Content-Type", "text/html; charset=utf-8")
+            ->send(true);
     }// execute
     
     

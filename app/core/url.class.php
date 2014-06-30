@@ -14,6 +14,25 @@ class Url
     
     
     /**
+     *
+     * 
+     * @return {String}
+     */
+    public static function getBase()
+    {
+        if(isset($_SERVER['HTTPS']))
+        {
+            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+        } else {
+            
+            $protocol = 'http';
+        }// else
+        
+        return $protocol . "://" . $_SERVER['SERVER_NAME'];
+    }// getBase
+    
+    
+    /**
      * Splits URL into segments and return them in array.
      * 
      * @return {Array} Array of URL segments

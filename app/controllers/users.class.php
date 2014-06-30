@@ -28,9 +28,17 @@ class Users
             $user = \models\User::forge($formData["email"], $formData["name"]);
             
             // If validation is passed, sending registration email, else just getting validation errors:
-            if ($user->validate()) $this->_sendRegistrationMail($user);
-            else $errors = $user->getErrors();
-                   
+            if ($user->validate())
+            {    
+                \core\Session::forge()
+                    ->set("registration_token", $user->getRegistrationToken())
+                    ->commit();
+                $this->_sendRegistrationMail($user);
+            } else {
+                
+                $errors = $user->getErrors();
+            }// else
+            
         } else { // Creating an empty new user without validation:
             
             $user = \models\User::forge();
@@ -56,6 +64,21 @@ class Users
     
     
     /**
+     *
+     * 
+     */
+    public function confirm()
+    {
+        $data = \core\Request::forge()->getData();
+        
+        if ($data['token'] !== \core\Session::forge()->get("registration_token")) echo "нетушки"; 
+        
+        return \core\View::forge("layout")->setData(array("content" => "вы зарегены"))->render();
+        
+    }// _confirm
+    
+    
+    /**
      * Sends registration mail and redirects user to info page.
      * 
      * @access private
@@ -64,11 +87,15 @@ class Users
      */
     private function _sendRegistrationMail($user)
     {
+        $link = \core\Url::getBase() . "/users/confirm?token=" . $user->getRegistrationToken() 
+            . "&email=" . $user->getEmail() . "&name=" . $user->getName() . "&password=" . $user->getPassword();
+        
         $headers  = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $message = \core\View::forge("mail")->setData(array("user" => $user))->render();
+        $headers .= "From: Testpage\r\n";
+        $headers .= "Content-type: text/html; charset=\"UTF-8\"\r\n";
+        $message = \core\View::forge("mail")->setData(array("user" => $user, "link" => $link))->render();
         mail($user->getEmail(), "Your registration on test page", $message, $headers);
         
         \core\Response::redirect("reginfo");
-    }//_sendRegistrationMail
+    }// _sendRegistrationMail
 }// Users

@@ -12,8 +12,15 @@ namespace models;
 class User
 {
     
+    const REGISTRATION_TOKEN_LENGTH = 18;
+    const PASSWORD_MIN_LENGTH       = 6;
+    const PASSWORD_MAX_LENGTH       = 10;
+    const PASSWORD_SALT             = "N31b!pR4";
+    
     private $_email;
     private $_name;
+    private $_password;
+    private $_token;
     private $_errors; 
     
     
@@ -43,6 +50,8 @@ class User
     {
         $this->_email = $email;
         $this->_name = $name;
+        $this->_generatePassword();
+        $this->_generateRegistrationToken();
     }// __construct
     
     
@@ -99,6 +108,28 @@ class User
     
     
     /**
+     *
+     * 
+     */
+    public function getRegistrationToken()
+    {
+        return $this->_token;        
+    }// _getRegistrationToken
+    
+    
+    /**
+     * Returns generated password.
+     * 
+     * @access public
+     * @return {String} Current user name
+     */
+    public function getPassword()
+    {
+        return $this->_password;
+    }// _getPassword
+    
+    
+    /**
      * Returns current user validation errors array. Call "validate" method
      * before otherwise array will be empty. 
      * 
@@ -112,22 +143,52 @@ class User
         
     
     /**
-     *
+     * Generates registration token.
      * 
+     * @access private
      */
-    public function generateRegistrationToken()
-    {
-        
-        
-    }
+    public function _generateRegistrationToken()
+    {        
+        $this->_token = static::_randomString(static::REGISTRATION_TOKEN_LENGTH);
+    }// _generateRegistrationToken
     
     
     /**
-     *
+     * Generates user password.
      * 
+     * @access private
      */
-    public function generatePassword()
+    private function _generatePassword()
     {
-        
+        // Initialize a random desired length:
+        $length = rand(static::PASSWORD_MIN_LENGTH, static::PASSWORD_MAX_LENGTH);
+        $this->_password = static::_randomString($length);
     }// sendRegistrationMail
+    
+    
+    /**
+     * Generates random string of given length.
+     * 
+     * @param {Integer} $length Result string length
+     * @return {String} Generated string
+     */
+    private static function _randomString($length)
+    {
+        $result = '';
+        $charSets = array(
+            array(48, 57), // Digits
+            array(65, 90), // Capital letters
+            array(97, 122) // Lowercase letters
+        );
+        $tempSet = null;
+        
+        for($currentLength = $length; $currentLength--; ) 
+        {
+            // Append a random ASCII character (only letters):
+            $tempSet = rand(0, sizeof($charSets) - 1);
+            $result .= chr(rand($charSets[$tempSet][0], $charSets[$tempSet][1]));
+        }// for
+        
+        return $result;
+    }//_randomString
 }// User
