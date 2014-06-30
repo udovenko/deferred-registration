@@ -12,11 +12,11 @@ namespace controllers;
 class Index extends Common
 {
     
-    const SESSION_USER_ID_KEY = "user_id";
-    
-    
     /**
      * Renders index page.
+     * 
+     * @access public
+     * @return {String} Rendered page
      */
     public function get()
     {

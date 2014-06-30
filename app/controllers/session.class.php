@@ -4,15 +4,20 @@ namespace controllers;
 
 
 /** 
- * To change this license header, choose License Headers in Project Properties.
+ * Session resource controller. Responsible for logging user in/out.
+ * 
+ * @author Denis Udovenko
+ * @version 1.0.3
  */
 class Session extends Common
 {
     
-    
     /**
-     *
+     * Handles authentication form submits. Cretes new session if user submited
+     * valid data or renders form again with error message.
      * 
+     * @access public
+     * @return {String} Rendered form or executes redirect response
      */
     public function create()
     {
@@ -48,8 +53,9 @@ class Session extends Common
     
     
     /**
-     *
+     * Logout method. Destroys current session and redirects to index page. 
      * 
+     * @access public
      */
     public function destroy()
     {

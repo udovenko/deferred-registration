@@ -4,7 +4,10 @@ namespace controllers;
 
 
 /**
+ * Common parent for application controllers. 
  * 
+ * @author Denis Udovenko
+ * @version 1.0.1
  */
 class Common
 {
@@ -14,8 +17,12 @@ class Common
     
     
     /**
-     *
+     * Renders page layout with given content depending on presence of logged 
+     * in user.
      * 
+     * @access protected
+     * @param {String} Rendered page content
+     * @return {String} Page layout with given content
      */
     protected function _renderLayout($content)
     {
@@ -25,9 +32,10 @@ class Common
     
     
     /**
-     *
+     * Checks if session contains current user identifier and sets "_user"
+     * field if so.
      * 
-     * 
+     * @access protected
      */
     protected function _setCurrentUser()
     {
