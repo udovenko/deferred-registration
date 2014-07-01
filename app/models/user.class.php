@@ -72,7 +72,8 @@ class User
         
         
         // Validation rules for e-mail:
-        if (!isset($this->_email) || empty(trim($this->_email)))
+        $trimmedEmail = trim($this->_email);
+        if (!isset($this->_email) || empty($trimmedEmail))
             $this->_errors[] = "email is empty";
         
         if (!preg_match("/\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i", $this->_email)) 
@@ -82,7 +83,8 @@ class User
         if (!empty($users)) $this->_errors[] = "email is already taken";
         
         // Validation rules for name:
-        if (!isset($this->_name) || empty(trim($this->_name)))
+        $trimmedName = trim($this->_name);
+        if (!isset($this->_name) || empty($trimmedName))
             $this->_errors[] = "name is empty";
 
         if (strlen($this->_name) > 20) $this->_errors[] = "name is too long (only 20 characters is allowed)";

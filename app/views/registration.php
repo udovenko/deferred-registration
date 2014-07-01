@@ -2,7 +2,9 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <form role="form" method="post">
-            <?php if(!empty($user->getErrors())) { ?>
+            <?php 
+            $errors = $user->getErrors();
+            if(!empty($errors)) { ?>
                 <div id="error_explanation">
                     <div class="alert alert-danger">
                       The form contains errors.

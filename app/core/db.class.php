@@ -12,8 +12,8 @@ namespace core;
 class Db
 {
     const DB_HOST = "localhost";
-    const DB_NAME = "registration";
-    const DB_USER = "registration";
+    const DB_NAME = "udovenko_reg";
+    const DB_USER = "udovenko_reg";
     const DB_PASS = "Ztn48cfg87vn";
     
     
