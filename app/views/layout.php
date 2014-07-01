@@ -17,10 +17,10 @@
                   
                   <?php if (isset($user) && !$user->isNew()) { ?>
                     <li><a href="/users/show">Profile</a></li>
-                    <li><a href="/session/destroy">Logout</a></li>
+                    <li><a href="/sessions/destroy">Logout</a></li>
                   <?php } else { ?>
                     
-                    <li><a href="/session/create">Login</a></li>
+                    <li><a href="/sessions/create">Login</a></li>
                   <?php } ?>
                 </ul>
               </nav>

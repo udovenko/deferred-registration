@@ -20,7 +20,9 @@ class Index extends Common
      */
     public function get()
     {
-        $content = \core\View::forge("index")->render();
+        $this->_setCurrentUser();
+        
+        $content = \core\View::forge("index")->setData(array("user" => $this->_user))->render();
         return $this->_renderLayout($content);
     }// get
 }// Index

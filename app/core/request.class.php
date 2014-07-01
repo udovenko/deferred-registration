@@ -14,11 +14,9 @@ class Request
     
     const POST = 'post';
     const GET = 'get';
-    //const PUT = 'put';
-    //const DELETE = 'delete';
-    
+
     private $_data = array();
-    //private $_headers = null;
+    private $_headers = null;
    
     
     /**
@@ -47,31 +45,37 @@ class Request
     
     
     /**
-     * получение заголовков запроса Apache
-     * с заглушкой для nginx
-     * @param string $key
-     * @return array
+     * If necessary transforms Ngnix headers into Apache-like format.
+     * 
+     * @author Alexander Bazhin
+     * @param {String} $key Key for practicular header
+     * @return {Array} Array of headers or practicular header
      */
-    /*public function getApacheLikeHeaders($key = null) {
-        if (is_null($this->_headers)) {
-            if (function_exists('apache_request_headers')) { // apache
+    public function getApacheLikeHeaders($key = null) 
+    {        
+        if (is_null($this->_headers)) 
+        {
+            // For Apache:
+            if (function_exists('apache_request_headers')) 
+            { 
                 $this->_headers = apache_request_headers();
-            } else { // nginx
+            } else { // For Nginx
+                
                 $this->_headers = '';
-                foreach ($_SERVER as $name => $value) {
-                    if (substr($name, 0, 5) == 'HTTP_') {
+                foreach ($_SERVER as $name => $value) 
+                {
+                    if (substr($name, 0, 5) == 'HTTP_') 
+                    {
                         $this->_headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-                    }
-                }
-            }
-        }
+                    }// if
+                }// if
+            }// else
+        }// if
 
-        if (is_null($key)) {
-            return $this->_headers;
-        } else {
-            return isset($this->_headers[$key]) ? $this->_headers[$key] : null;
-        }
-    }*/
+        if (is_null($key)) return $this->_headers;
+        else return isset($this->_headers[$key]) ? $this->_headers[$key] : null;
+    }// getApacheLikeHeaders
+    
     
     /**
      * Receives request parameters depending on request type.
@@ -86,26 +90,7 @@ class Request
        
         switch ($request) 
         {
-            //case self::PUT:
-                
-                /*if (isset($this->_data[$request])) 
-                {
-                    return $this->_data[$request];
-                } else {
-                    
-                    $dataStr = file_get_contents('php://input');
-                    
-                    $dataType = $this->getApacheLikeHeaders('Content-Type');
-                    if (strstr($dataType, 'application/json') !== false) $data = json_decode($dataStr, true);
-                    else parse_str($dataStr, $data);
-                    
-                    $this->_data[$request] = $data;
-                    return $this->_data[$request];
-                }// else
-                
-                break;*/
-                
-            case self::GET: //case self::DELETE:
+            case self::GET:
                 
                 if (isset($this->_data[$request])) 
                 {

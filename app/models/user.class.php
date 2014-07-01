@@ -21,6 +21,7 @@ class User
     private $_email;
     private $_name;
     private $_encryptedPassword;
+    private $_createdAt;
     private $_token;
     private $_errors; 
     
@@ -46,12 +47,15 @@ class User
      * @access public
      * @param {String} $email Users e-mail
      * @param {String} $name User name
+     * @param {String} $id User identifier
+     * @param {String} $createdAt User creation timestamp
      */
-    public function __construct($email = null, $name = null, $id = null)
+    public function __construct($email = null, $name = null, $id = null, $createdAt = null)
     {
         $this->_email = $email;
         $this->_name = $name;
         $this->_id = $id;
+        $this->_createdAt = $createdAt;
     }// __construct
     
     
@@ -179,6 +183,18 @@ class User
     
     
     /**
+     * Returns user creation timestamp.
+     * 
+     * @access public
+     * @return {Integer} User creation timestamp
+     */
+    public function getCreatedAt()
+    {
+        return $this->_createdAt;
+    }// getCreatedAt
+    
+    
+    /**
      * Returns generated password.
      * 
      * @access public
@@ -231,7 +247,7 @@ class User
         $result = array();
         while ($user = $usersQuery->fetch())
         {
-            $result[] = new static($user->email, $user->name, $user->id);
+            $result[] = new static($user->email, $user->name, $user->id, strtotime($user->created_at));
         }//while
         
         return $result;

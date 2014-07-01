@@ -9,7 +9,7 @@ namespace controllers;
  * @author Denis Udovenko
  * @version 1.0.3
  */
-class Session extends Common
+class Sessions extends Common
 {
     
     /**

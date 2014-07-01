@@ -3,7 +3,7 @@
 <div class="spacer30"></div>
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <p>You'relogged in here with your E-mail <strong><?php echo $user->getEmail(); ?></strong> 
+        <p>Your account was created <strong><?php echo date("d.m.Y H:i", $user->getCreatedAt()); ?></strong>. You'relogged in here with your E-mail <strong><?php echo $user->getEmail(); ?></strong> 
         and secret password. Please enjoy your stay!</p>
     </div>
 </div>
