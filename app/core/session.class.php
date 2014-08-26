@@ -118,17 +118,6 @@ class Session
     {
         unset($_SESSION[$name]);
     }// remove
-    
-    
-    /**
-     * Re
-     * 
-     * @return string
-     */
-   /* public function getName()
-    {
-        return session_name();
-    }// getName*/
 
     
     /**

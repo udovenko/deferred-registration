@@ -14,12 +14,6 @@ class Router
 {
     
     /**
-     * @var {String} Class name for current request.
-     */
-    //private static $_class = null;
-    
-    
-    /**
      * Redirects URL string to controllers actions and handles results.
      * 
      * @static
@@ -60,17 +54,6 @@ class Router
     
     
     /**
-     * Returns current controller.
-     * 
-     * @return {Object | null} Current controller
-     */
-    /*public static function getController() 
-    {
-        return $this->_class;
-    }// getController*/
-    
-    
-    /**
      * Determines controller method name from given URL.
      * 
      * @static
@@ -104,20 +87,6 @@ class Router
                 }// elses
                 
                 break;
-                
-            /*case 'PUT':
-                
-                if (!empty($url[2]) && is_numeric($url[2])) $methodName = 'update';
-                else throw new \Exception("Can't determine method name for PUT request");
-                                        
-                break;
-                
-            case 'DELETE':
-                
-                if (!empty($url[2]) && is_numeric($url[2])) $methodName = 'delete';
-                else throw new \Exception("Can't determine method name for DELETE request");
-                
-                break;*/
                 
             default:
                 
